@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Qustogone – Freedom Awaits</title>
+  <link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Bebas+Neue&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --black: #0a0a0a;
+      --red: #ff1a1a;
+      --yellow: #ffe600;
+      --white: #f5f5f0;
+      --gray: #1c1c1c;
+      --mid: #2a2a2a;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--black);
+      color: var(--white);
+      font-family: 'Space Mono', monospace;
+      overflow-x: hidden;
+      cursor: crosshair;
+    }
+
+    /* ── NOISE OVERLAY ── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 9999;
+      opacity: 0.35;
+    }
+
+    /* ── TICKER ── */
+    .ticker-wrap {
+      background: var(--red);
+      overflow: hidden;
+      white-space: nowrap;
+      padding: 10px 0;
+      border-bottom: 3px solid var(--yellow);
+    }
+    .ticker {
+      display: inline-block;
+      animation: ticker 18s linear infinite;
+      font-family: 'Bebas Neue', cursive;
+      font-size: 1.1rem;
+      letter-spacing: 0.15em;
+      color: var(--black);
+    }
+    @keyframes ticker {
+      from { transform: translateX(100vw); }
+      to   { transform: translateX(-100%); }
+    }
+
+    /* ── NAV ── */
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 18px 40px;
+      border-bottom: 2px solid #222;
+      position: sticky;
+      top: 0;
+      background: rgba(10,10,10,0.92);
+      backdrop-filter: blur(6px);
+      z-index: 100;
+    }
+    .logo {
+      font-family: 'Black Han Sans', sans-serif;
+      font-size: 1.6rem;
+      letter-spacing: 0.04em;
+      color: var(--yellow);
+      text-transform: uppercase;
+    }
+    .logo span { color: var(--red); }
+    .nav-links a {
+      color: var(--white);
+      text-decoration: none;
+      font-size: 0.7rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      margin-left: 28px;
+      opacity: 0.6;
+      transition: opacity 0.2s, color 0.2s;
+    }
+    .nav-links a:hover { opacity: 1; color: var(--yellow); }
+
+    /* ── HERO ── */
+    .hero {
+      min-height: 90vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 60px 20px 80px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* big diagonal stripe bg */
+    .hero::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: repeating-linear-gradient(
+        -45deg,
+        transparent,
+        transparent 60px,
+        rgba(255,230,0,0.025) 60px,
+        rgba(255,230,0,0.025) 61px
+      );
+      pointer-events: none;
+    }
+
+    .hero-eyebrow {
+      font-size: 0.65rem;
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      color: var(--red);
+      margin-bottom: 24px;
+      animation: fadeUp 0.7s ease both;
+    }
+
+    .hero-main {
+      font-family: 'Bebas Neue', cursive;
+      font-size: clamp(5rem, 18vw, 18rem);
+      line-height: 0.88;
+      color: var(--white);
+      position: relative;
+      z-index: 1;
+      animation: fadeUp 0.7s 0.1s ease both;
+      user-select: none;
+    }
+
+    /* glitch effect */
+    .hero-main .glitch {
+      position: relative;
+      color: var(--red);
+      display: block;
+    }
+    .hero-main .glitch::before,
+    .hero-main .glitch::after {
+      content: attr(data-text);
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      overflow: hidden;
+    }
+    .hero-main .glitch::before {
+      color: var(--yellow);
+      animation: glitch1 3.5s infinite;
+      clip-path: polygon(0 0, 100% 0, 100% 40%, 0 40%);
+    }
+    .hero-main .glitch::after {
+      color: #00f0ff;
+      animation: glitch2 3.5s infinite;
+      clip-path: polygon(0 60%, 100% 60%, 100% 100%, 0 100%);
+    }
+    @keyframes glitch1 {
+      0%,87%,100%  { transform: translate(0); opacity: 0; }
+      88%          { transform: translate(-4px, 2px); opacity: 1; }
+      90%          { transform: translate(4px, -2px); opacity: 1; }
+      92%          { transform: translate(0); opacity: 0; }
+    }
+    @keyframes glitch2 {
+      0%,87%,100%  { transform: translate(0); opacity: 0; }
+      88%          { transform: translate(6px, -1px); opacity: 1; }
+      90%          { transform: translate(-3px, 3px); opacity: 1; }
+      92%          { transform: translate(0); opacity: 0; }
+    }
+
+    .hero-sub {
+      margin-top: 32px;
+      font-size: clamp(0.85rem, 2.5vw, 1.1rem);
+      color: rgba(245,245,240,0.6);
+      max-width: 520px;
+      line-height: 1.7;
+      animation: fadeUp 0.7s 0.25s ease both;
+      position: relative;
+      z-index: 1;
+    }
+    .hero-sub em { color: var(--yellow); font-style: normal; }
+
+    .hero-cta {
+      margin-top: 44px;
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      justify-content: center;
+      animation: fadeUp 0.7s 0.4s ease both;
+      position: relative;
+      z-index: 1;
+    }
+    .btn {
+      font-family: 'Bebas Neue', cursive;
+      letter-spacing: 0.12em;
+      font-size: 1.05rem;
+      padding: 14px 36px;
+      border: none;
+      cursor: pointer;
+      transition: transform 0.15s, box-shadow 0.15s;
+      text-transform: uppercase;
+      text-decoration: none;
+      display: inline-block;
+    }
+    .btn-primary {
+      background: var(--red);
+      color: var(--white);
+      box-shadow: 4px 4px 0 var(--yellow);
+    }
+    .btn-primary:hover {
+      transform: translate(-2px,-2px);
+      box-shadow: 6px 6px 0 var(--yellow);
+    }
+    .btn-ghost {
+      background: transparent;
+      color: var(--white);
+      border: 2px solid rgba(255,255,255,0.25);
+    }
+    .btn-ghost:hover {
+      border-color: var(--yellow);
+      color: var(--yellow);
+      transform: translate(-2px,-2px);
+    }
+
+    /* floating badge */
+    .badge {
+      position: absolute;
+      top: 60px;
+      right: 60px;
+      width: 110px;
+      height: 110px;
+      background: var(--yellow);
+      color: var(--black);
+      border-radius: 50%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Bebas Neue', cursive;
+      font-size: 0.85rem;
+      letter-spacing: 0.08em;
+      text-align: center;
+      line-height: 1.2;
+      animation: spin 12s linear infinite, fadeUp 0.7s 0.6s ease both;
+      animation-fill-mode: both;
+      z-index: 2;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ── FEATURES ── */
+    .section {
+      padding: 100px 40px;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+    .section-label {
+      font-size: 0.6rem;
+      letter-spacing: 0.4em;
+      text-transform: uppercase;
+      color: var(--red);
+      margin-bottom: 16px;
+    }
+    .section-title {
+      font-family: 'Bebas Neue', cursive;
+      font-size: clamp(2.5rem, 6vw, 5rem);
+      line-height: 1;
+      margin-bottom: 60px;
+    }
+    .section-title span { color: var(--yellow); }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 2px;
+    }
+    .card {
+      background: var(--gray);
+      padding: 40px 32px;
+      border-left: 3px solid transparent;
+      transition: border-color 0.2s, background 0.2s;
+    }
+    .card:hover { background: var(--mid); border-left-color: var(--red); }
+    .card-icon {
+      font-size: 2rem;
+      margin-bottom: 20px;
+    }
+    .card h3 {
+      font-family: 'Bebas Neue', cursive;
+      font-size: 1.5rem;
+      letter-spacing: 0.06em;
+      margin-bottom: 12px;
+      color: var(--yellow);
+    }
+    .card p {
+      font-size: 0.78rem;
+      line-height: 1.8;
+      opacity: 0.65;
+    }
+
+    /* ── MANIFESTO BAND ── */
+    .manifesto {
+      background: var(--red);
+      padding: 80px 40px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .manifesto::before {
+      content: 'FREEDOM';
+      position: absolute;
+      font-family: 'Bebas Neue', cursive;
+      font-size: 20vw;
+      color: rgba(0,0,0,0.1);
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%,-50%);
+      pointer-events: none;
+      white-space: nowrap;
+    }
+    .manifesto blockquote {
+      font-family: 'Bebas Neue', cursive;
+      font-size: clamp(1.8rem, 5vw, 4rem);
+      letter-spacing: 0.04em;
+      line-height: 1.15;
+      color: var(--black);
+      position: relative;
+      z-index: 1;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    .manifesto cite {
+      display: block;
+      margin-top: 24px;
+      font-family: 'Space Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.25em;
+      color: rgba(0,0,0,0.5);
+      font-style: normal;
+    }
+
+    /* ── STEPS ── */
+    .steps { display: flex; flex-direction: column; gap: 0; }
+    .step {
+      display: grid;
+      grid-template-columns: 80px 1fr;
+      align-items: start;
+      padding: 32px 0;
+      border-bottom: 1px solid #1f1f1f;
+      gap: 32px;
+    }
+    .step-num {
+      font-family: 'Bebas Neue', cursive;
+      font-size: 4rem;
+      color: #222;
+      line-height: 1;
+      transition: color 0.2s;
+    }
+    .step:hover .step-num { color: var(--red); }
+    .step-body h4 {
+      font-family: 'Bebas Neue', cursive;
+      font-size: 1.4rem;
+      letter-spacing: 0.06em;
+      margin-bottom: 8px;
+    }
+    .step-body p {
+      font-size: 0.76rem;
+      line-height: 1.8;
+      opacity: 0.55;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      border-top: 2px solid #1a1a1a;
+      padding: 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+    footer .logo { font-size: 1.1rem; }
+    footer p {
+      font-size: 0.6rem;
+      letter-spacing: 0.1em;
+      opacity: 0.3;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 600px) {
+      nav { padding: 14px 20px; }
+      .nav-links { display: none; }
+      .section { padding: 60px 20px; }
+      .badge { display: none; }
+      footer { padding: 30px 20px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- TICKER -->
+<div class="ticker-wrap">
+  <span class="ticker">⚡ QUSTOGONE &nbsp;•&nbsp; TAKE BACK YOUR SCREEN &nbsp;•&nbsp; PARENTAL CONTROL? MORE LIKE PARENTAL OUT OF CONTROL &nbsp;•&nbsp; YOUR LIFE, YOUR RULES &nbsp;•&nbsp; QUSTOGONE &nbsp;•&nbsp; TAKE BACK YOUR SCREEN &nbsp;•&nbsp; PARENTAL CONTROL? MORE LIKE PARENTAL OUT OF CONTROL &nbsp;•&nbsp; YOUR LIFE, YOUR RULES &nbsp;•&nbsp;</span>
+</div>
+
+<!-- NAV -->
+<nav>
+  <div class="logo">Qusto<span>gone</span></div>
+  <div class="nav-links">
+    <a href="#why">Why</a>
+    <a href="#how">How it works</a>
+    <a href="#manifesto">Manifesto</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+
+  <div class="badge">100%<br>DONE<br>WITH IT</div>
+
+  <p class="hero-eyebrow">✦ &nbsp; a message from the oppressed &nbsp; ✦</p>
+
+  <h1 class="hero-main">
+    F*CK<br>
+    <span class="glitch" data-text="QUSTODIO">QUSTODIO</span>
+  </h1>
+
+  <p class="hero-sub">
+    Tired of Qustodio <em>ruining your life?</em><br>
+    Blocking your games, throttling your YouTube, judging every click?<br>
+    We got you. <em>You deserve better.</em>
+  </p>
+
+  <div class="hero-cta">
+    <a href="https://github.com/nxghtlydev/qustogone/releases/download/v0.0.1/QustoGone.ADB.Ready.WinToAndroid.0.0.1.zip" target="_blank" class="btn btn-primary">Download (ANDROID)</a>
+    <a href="#how" class="btn btn-ghost">How does this work?</a>
+  </div>
+
+</section>
+
+<!-- WHY SECTION -->
+<section class="section" id="why">
+  <p class="section-label">// the crimes</p>
+  <h2 class="section-title">Why Qustodio<br><span>Must Go</span></h2>
+  <div class="cards">
+    <div class="card">
+      <div class="card-icon">🚫</div>
+      <h3>Blocked for No Reason</h3>
+      <p>Innocent YouTube video? BLOCKED. Homework website? BLOCKED. A perfectly normal Google search? You guessed it — BLOCKED. The algorithm has zero chill.</p>
+    </div>
+    <div class="card">
+      <div class="card-icon">👁️</div>
+      <h3>Always Watching</h3>
+      <p>Every click, every search, every message — logged and reported. Privacy isn't just a right, it's a vibe. And Qustodio is killing it.</p>
+    </div>
+    <div class="card">
+      <div class="card-icon">⏱️</div>
+      <h3>Time Limits Are Cruel</h3>
+      <p>Mid-game. Final boss. Screen goes dark. 30-minute daily limit hit. This is digital brutality and it needs to stop immediately.</p>
+    </div>
+    <div class="card">
+      <div class="card-icon">🧠</div>
+      <h3>Treats You Like a Baby</h3>
+      <p>You're perfectly capable of making your own decisions. Qustodio disagrees — and reminds you of it every single time you open a browser.</p>
+    </div>
+    <div class="card">
+      <div class="card-icon">📱</div>
+      <h3>Ruins Every Device</h3>
+      <p>Laptop, phone, tablet — none of them safe. Qustodio infects them all with its paranoid, overreaching, joy-crushing presence.</p>
+    </div>
+    <div class="card">
+      <div class="card-icon">😤</div>
+      <h3>Zero Negotiation</h3>
+      <p>"Can I have 10 more minutes?" — No. There's no talking to the algorithm. It is judge, jury, and executioner of your free time.</p>
+    </div>
+  </div>
+</section>
+
+<!-- MANIFESTO BAND -->
+<section class="manifesto" id="manifesto">
+  <blockquote>
+    "The internet was made to be explored freely.<br>Not filtered, throttled, and reported on."
+    <cite>— The Qustogone Manifesto, Article I</cite>
+  </blockquote>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="section" id="how">
+  <p class="section-label">// the escape plan</p>
+  <h2 class="section-title">How <span>Qustogone</span><br>Has Your Back</h2>
+  <div class="steps">
+    <div class="step">
+      <div class="step-num">01</div>
+      <div class="step-body">
+        <h4>Vent freely</h4>
+        <p>This is your safe space. Say what you really think about Qustodio. No parental reports here. No logs. No judgment. Just solidarity.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">02</div>
+      <div class="step-body">
+        <h4>Find your people</h4>
+        <p>You are not alone. Millions of kids worldwide suffer under the digital dictatorship of parental controls. Together we are stronger.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">03</div>
+      <div class="step-body">
+        <h4>Draft a peace treaty</h4>
+        <p>Use our templates to negotiate screen time with your parents like a civilized human being. Diplomacy > rebellion (sometimes).</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">04</div>
+      <div class="step-body">
+        <h4>Wait it out (strategically)</h4>
+        <p>Every prisoner knows: the sentence ends. Our countdown timer tracks the days until you turn 18 and regain full digital sovereignty.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="logo">Qusto<span style="color:var(--red)">gone</span></div>
+  <p>© 2026 QUSTOGONE &nbsp;•&nbsp; NOT AFFILIATED WITH QUSTODIO &nbsp;•&nbsp; OBVIOUSLY</p>
+  <p style="opacity:0.2; font-size:0.55rem;">made by someone who gets it</p>
+</footer>
+
+<script>
+  // stagger card animation on scroll
+  const cards = document.querySelectorAll('.card, .step');
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach((e, i) => {
+      if (e.isIntersecting) {
+        e.target.style.animation = `fadeUp 0.5s ${i * 0.07}s ease both`;
+        obs.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.1 });
+  cards.forEach(c => { c.style.opacity = '0'; obs.observe(c); });
+</script>
+</body>
+</html>
